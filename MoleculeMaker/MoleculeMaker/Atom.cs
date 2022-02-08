@@ -12,7 +12,20 @@ namespace MoleculeMaker
     class Atom : Button
     {
         public AtomData Data { get; set; }
-        public Atom[] ConnectedAtoms { get; }
+        public List<Bond> ConnectedAtoms { get; }
+        public int NumOfHs { get; set; }
+        //public int CurrCharge
+        //{
+        //    get
+        //    {
+        //        int numConnected = NumOfHs;
+        //        foreach(var bond in ConnectedAtoms)
+        //        {
+        //            numConnected += bond.NumOfBonds;
+        //        }
+        //        numC
+        //    }
+        //}
         public Atom(string name, string symbol, int bondsAmt, float en, Point pos) 
             : this(new AtomData(name, symbol, bondsAmt, en), pos) { }
 
@@ -22,8 +35,8 @@ namespace MoleculeMaker
             Location = pos;
             Size = new Size(35, 35);
             Text = data.Symbol;
-            ConnectedAtoms = new Atom[data.NumOfBondingSites];
             BackColor = Color.White;
+            NumOfHs = data.NumOfBondingSites;
         }
     }
 }

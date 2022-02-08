@@ -9,9 +9,12 @@ using MolMakerLB;
 
 namespace MoleculeMaker
 {
-    class Bond : PictureBox
+    class Bond
     {
-        BondData Data { get; set; }
+        public BondData Data { get; set; }
+        public Point point1 { get; set; }
+        public Point point2 { get; set; }
+        public int NumOfBonds { get; }
         
         private Bitmap bitmap;
         private Graphics graphics;
@@ -25,21 +28,10 @@ namespace MoleculeMaker
             Point mid1 = new Point(pos1.X + atom1.Width / 2, pos1.Y + atom1.Height / 2);
             Point mid2 = new Point(pos2.X + atom2.Width / 2, pos2.Y + atom2.Height / 2);
 
-            int PBX = Math.Min(mid1.X - 2, mid2.X - 2);
-            int PBY = Math.Min(mid1.Y - 2, mid2.Y - 2);
+            point1 = mid1;
+            point2 = mid2;
 
-            int width = Math.Abs(pos1.X - pos2.X) + 5;
-            int height = Math.Abs(pos1.Y - pos2.Y) + 5;
-
-            Location = new Point(PBX, PBY);
-            Size = new Size(width, height);
-
-            bitmap = new Bitmap(width, height);
-            graphics = Graphics.FromImage(bitmap);
-
-            graphics.DrawLine(new Pen(Color.Red, 5), new Point(pos1.X - PBX + atom1.Width / 2, pos1.Y - PBY + atom1.Height / 2), new Point(pos2.X - PBX + atom2.Width / 2, pos2.Y - PBY + atom2.Height / 2));
-
-            Image = bitmap;
+            NumOfBonds = numOfBonds;
         }
 
     }

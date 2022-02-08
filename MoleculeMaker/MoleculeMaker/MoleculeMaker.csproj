@@ -49,6 +49,9 @@
     <Compile Include="Atom.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="AtomInfoPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Bond.cs">
       <SubType>Component</SubType>
     </Compile>
