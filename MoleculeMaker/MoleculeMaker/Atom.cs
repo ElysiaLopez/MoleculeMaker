@@ -33,7 +33,7 @@ namespace MoleculeMaker
         {
             Data = data;
             Location = pos;
-            Size = new Size(35, 35);
+            Size = new Size(25, 25);
             Text = data.Symbol;
             BackColor = Color.White;
             NumOfHs = data.NumOfBondingSites;

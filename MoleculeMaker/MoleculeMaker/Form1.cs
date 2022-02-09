@@ -23,26 +23,17 @@ namespace MoleculeMaker
         Bitmap bitmap;
         Graphics graphics;
 
-        PictureBox boardPB;
         public Form1()
         {
             InitializeComponent();
 
             InfoLabel.Text = "";
 
-            bitmap = new Bitmap(MolsPanel.Width, MolsPanel.Height);
+            bitmap = new Bitmap(Board.Width, Board.Height);
             graphics = Graphics.FromImage(bitmap);
-
-            boardPB = new PictureBox();
-            boardPB.Location = MolsPanel.Location;
-            boardPB.Size = MolsPanel.Size;
             //boardPB.BackColor = Color.Blue;
             //graphics.DrawEllipse(new Pen(Brushes.Black, 5), new Rectangle(0, 0, 50, 50));
-            boardPB.Image = bitmap;
-
-            MolsPanel.Controls.Add(boardPB);
-            boardPB.SendToBack();
-            boardPB.Click += BoardPBClicked;
+            Board.Image = bitmap;
 
             bonds = new List<Bond>();
 
@@ -62,8 +53,12 @@ namespace MoleculeMaker
 
             selectedAtoms = new List<Atom>();
 
+            MolsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+
             Focus();
             this.KeyPreview = true;
+
+            Board.Click += BoardClicked;
         }
 
         private void AddMolButton_Click(object sender, EventArgs e)
@@ -72,7 +67,7 @@ namespace MoleculeMaker
             var selectedAtomData = (AtomData)MolsComboBox.SelectedItem;
             
             Atom atom = new Atom(selectedAtomData.Name, selectedAtomData.Symbol, selectedAtomData.NumOfBondingSites, selectedAtomData.EN, MousePosition);
-            MolsPanel.Controls.Add(atom);
+            Board.Controls.Add(atom);
             atom.BringToFront();
 
             UnselectAtoms();
@@ -118,9 +113,9 @@ namespace MoleculeMaker
             
 
             Bond bond = new Bond(selectedAtoms[0], selectedAtoms[1], 1);
-            graphics.DrawLine(new Pen(Color.Red, 4), bond.point1, bond.point2);
+            graphics.DrawLine(new Pen(Color.Black, 2), bond.point1, bond.point2);
             //boardPB.BringToFront();
-            boardPB.Image = bitmap;
+            Board.Image = bitmap;
 
             bonds.Add(bond);
 
@@ -139,19 +134,11 @@ namespace MoleculeMaker
         }
         private void dragInterval_Tick(object sender, EventArgs e)
         {
-            selectedAtoms.Last().Location = MolsPanel.PointToClient(new Point(MousePosition.X + 1, MousePosition.Y + 1));
+            selectedAtoms.Last().Location = Board.PointToClient(new Point(MousePosition.X + 1, MousePosition.Y + 1));
             Text = $"pos: {selectedAtoms.Last().Location}, ms: {MousePosition}";
         }
 
-        private void MolsPanelClicked(object sender, MouseEventArgs e)
-        {
-            dragInterval.Enabled = false;
-            UnselectAtoms();
-
-            InfoLabel.Text = "";
-        }
-
-        private void BoardPBClicked(object sender, EventArgs e)
+        private void BoardClicked(object sender, EventArgs e)
         {
             dragInterval.Enabled = false;
             UnselectAtoms();
@@ -160,7 +147,9 @@ namespace MoleculeMaker
         }
         private void ClearButton_Click(object sender, EventArgs e)
         {
-            MolsPanel.Controls.Clear();
+            Board.Controls.Clear();
+            graphics.Clear(Board.BackColor);
+            Board.Image = bitmap;
         }
         private void UnselectAtoms()
         {

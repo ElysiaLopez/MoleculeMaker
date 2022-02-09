@@ -12,7 +12,11 @@ namespace MoleculeMaker
     {
         public AtomData Data { get; set; }
         
-
+        private Label Text { get; set; }
+        /// <summary>
+        /// Deprotonate
+        /// </summary>
+        private Button DeprotButton { get; set; }
         public AtomInfoPanel(AtomData data)
         {
             Data = data;
