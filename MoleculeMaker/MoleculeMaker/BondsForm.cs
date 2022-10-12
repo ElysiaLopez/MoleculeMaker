@@ -19,11 +19,11 @@ namespace MoleculeMaker
             BondType = bondType;
         }
     }
-    public partial class BondsForm : Form
+    public partial class BondSelectForm : Form
     {
         public event EventHandler<BondsEventArgs> ButtonClick;
         public string SelectedButtonText { get; private set; }
-        public BondsForm()
+        public BondSelectForm()
         {
             InitializeComponent();
 

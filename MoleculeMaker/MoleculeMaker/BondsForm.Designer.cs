@@ -1,6 +1,6 @@
 ﻿namespace MoleculeMaker
 {
-    partial class BondsForm
+    partial class BondSelectForm
     {
         /// <summary>
         /// Required designer variable.

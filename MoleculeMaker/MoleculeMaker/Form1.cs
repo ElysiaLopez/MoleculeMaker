@@ -17,11 +17,13 @@ namespace MoleculeMaker
         List<Atom> selectedAtoms;
         List<AtomData> atomDatas;
 
-        BondsForm bondsForm;
+        BondSelectForm bondsForm;
         List<Bond> bonds;
 
         Bitmap bitmap;
         Graphics graphics;
+
+        Point cellSize = new Point(40, 40);
 
         public Form1()
         {
@@ -47,7 +49,7 @@ namespace MoleculeMaker
 
             MolsComboBox.Items.AddRange(atomDatas.ToArray());
 
-            bondsForm = new BondsForm();
+            bondsForm = new BondSelectForm();
 
             bondsForm.ButtonClick += BondTypeSelected;
 
@@ -59,6 +61,26 @@ namespace MoleculeMaker
             this.KeyPreview = true;
 
             Board.Click += BoardClicked;
+
+            DrawGrid();
+        }
+
+        private void DrawGrid()
+        {
+            Point gridSize = new Point(Board.Width / cellSize.X, Board.Height / cellSize.Y);
+            Pen color = Pens.Gray;
+
+            for(int x = 1; x <= gridSize.X; x++)
+            {
+                graphics.DrawLine(color, new Point(cellSize.X * x, 0), new Point(cellSize.X * x, Board.Height));
+            }
+
+            for(int y = 0; y <= gridSize.Y; y++)
+            {
+                graphics.DrawLine(color, new Point(0, cellSize.Y * y), new Point(Board.Width, cellSize.Y * y));
+            }
+
+            Board.Image = bitmap;
         }
 
         private void AddMolButton_Click(object sender, EventArgs e)
@@ -70,7 +92,6 @@ namespace MoleculeMaker
             Board.Controls.Add(atom);
             atom.BringToFront();
 
-            UnselectAtoms();
             selectedAtoms.Add(atom);
             Atoms.Add(atom);
             
@@ -89,11 +110,16 @@ namespace MoleculeMaker
         {
             Atom atom = (Atom)sender;
 
-            SetInfoText(atom);
+            if (dragInterval.Enabled)
+            {
+                dragInterval.Enabled = false;
+                UnselectAtoms();
+            }
 
             if (selectedAtoms.Contains(atom)) return;
 
-            selectedAtoms.Add(atom);
+            SelectAtom(atom);
+
             atom.ForeColor = Color.Red;
 
             if (selectedAtoms.Count <= 1)
@@ -105,8 +131,6 @@ namespace MoleculeMaker
         private void BondTypeSelected(object sender, BondsEventArgs e)
         {
             bondsForm.Hide();
-
-            
 
             if (selectedAtoms.Count < 2) throw new Exception("Need to select two atoms");
 
@@ -141,7 +165,11 @@ namespace MoleculeMaker
         }
         private void dragInterval_Tick(object sender, EventArgs e)
         {
-            selectedAtoms.Last().Location = Board.PointToClient(new Point(MousePosition.X + 1, MousePosition.Y + 1));
+            var atom = selectedAtoms.Last();
+            int x = Board.PointToClient(MousePosition).X / cellSize.X * cellSize.X + (cellSize.X / 2 - atom.Width / 2);
+            int y = Board.PointToClient(MousePosition).Y / cellSize.Y * cellSize.Y + (cellSize.Y / 2 - atom.Height / 2);
+            Point gridLocation = new Point(x, y);
+            atom.Location = gridLocation;
             Text = $"pos: {selectedAtoms.Last().Location}, ms: {MousePosition}";
         }
 
@@ -149,14 +177,17 @@ namespace MoleculeMaker
         {
             dragInterval.Enabled = false;
             UnselectAtoms();
-
-            InfoLabel.Text = "";
         }
         private void ClearButton_Click(object sender, EventArgs e)
         {
             Board.Controls.Clear();
             graphics.Clear(Board.BackColor);
-            Board.Image = bitmap;
+            DrawGrid();
+        }
+        private void SelectAtom(Atom atom)
+        {
+            selectedAtoms.Add(atom);
+            SetInfoText(atom);
         }
         private void UnselectAtoms()
         {
@@ -165,6 +196,7 @@ namespace MoleculeMaker
                 atom.ForeColor = Color.Black;
             }
             selectedAtoms.Clear();
+            InfoLabel.Text = "";
         }
 
         private void KeyPressed(object sender, KeyPressEventArgs e)
