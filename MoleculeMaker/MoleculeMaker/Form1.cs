@@ -146,16 +146,18 @@ namespace MoleculeMaker
             {
                 case BondTypes.Single:
                     bond = new Bond(selectedAtoms[0], selectedAtoms[1], 1);
-                    graphics.DrawLine(new Pen(Color.Black, 2), bond.point1, bond.point2);
                     break;
                 case BondTypes.Double:
                     bond = new Bond(selectedAtoms[0], selectedAtoms[1], 2);
-                    graphics.DrawLine(new Pen(Color.Black, 2), bond.point1, bond.point2);
                     break;
                 case BondTypes.Triple:
                     bond = new Bond(selectedAtoms[0], selectedAtoms[1], 3);
-                    graphics.DrawLine(new Pen(Color.Black, 2), bond.point1, bond.point2);
                     break;
+            }
+
+            for(int i = 0; i < bond.NumOfBonds; i++)
+            {
+                graphics.DrawLine(new Pen(Color.Black, 2), bond.PointsA[i], bond.PointsB[i]);
             }
 
             bonds.Add(bond);
