@@ -10,9 +10,18 @@ using System.Windows.Forms;
 
 namespace MoleculeMaker
 {
+    public class BondsEventArgs : EventArgs
+    {
+        public BondTypes BondType { get; set; }
+
+        public BondsEventArgs(BondTypes bondType)
+        {
+            BondType = bondType;
+        }
+    }
     public partial class BondsForm : Form
     {
-        public event EventHandler ButtonClick;
+        public event EventHandler<BondsEventArgs> ButtonClick;
         public string SelectedButtonText { get; private set; }
         public BondsForm()
         {
@@ -26,10 +35,8 @@ namespace MoleculeMaker
 
         public void ButtonClicked(object sender, EventArgs e)
         {
-            Button button = (Button)sender;
-
-            SelectedButtonText = button.Text;
-            ButtonClick?.Invoke(this, EventArgs.Empty);
+            BondsButton button = (BondsButton)sender;
+            ButtonClick?.Invoke(this, new BondsEventArgs(button.BondType));
         }
     }
 }

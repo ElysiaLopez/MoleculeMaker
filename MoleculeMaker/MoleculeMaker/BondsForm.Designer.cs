@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.SingleButton = new System.Windows.Forms.Button();
-            this.DoubleButton = new System.Windows.Forms.Button();
-            this.TripleButton = new System.Windows.Forms.Button();
-            this.CancelButton = new System.Windows.Forms.Button();
+            this.SingleButton = new BondsButton(BondTypes.Single);
+            this.DoubleButton = new BondsButton(BondTypes.Double);
+            this.TripleButton = new BondsButton(BondTypes.Triple);
+            this.CancelButton = new BondsButton(BondTypes.None);
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -99,10 +99,10 @@
 
         #endregion
 
-        private System.Windows.Forms.Button SingleButton;
-        private System.Windows.Forms.Button DoubleButton;
-        private System.Windows.Forms.Button TripleButton;
-        private System.Windows.Forms.Button CancelButton;
+        private BondsButton SingleButton;
+        private BondsButton DoubleButton;
+        private BondsButton TripleButton;
+        private BondsButton CancelButton;
         private System.Windows.Forms.Label label1;
     }
 }

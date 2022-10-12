@@ -55,12 +55,14 @@
     <Compile Include="Bond.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="BondsForm.cs">
-      <SubType>Form</SubType>
+    <Compile Include="BondsButton.cs">
+      <SubType>Component</SubType>
     </Compile>
+    <Compile Include="BondsForm.cs" />
     <Compile Include="BondsForm.Designer.cs">
       <DependentUpon>BondsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Enums.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

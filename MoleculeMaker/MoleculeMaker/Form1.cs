@@ -102,7 +102,7 @@ namespace MoleculeMaker
             }
             bondsForm.Show();
         }
-        private void BondTypeSelected(object sender, EventArgs e)
+        private void BondTypeSelected(object sender, BondsEventArgs e)
         {
             bondsForm.Hide();
 
@@ -110,26 +110,33 @@ namespace MoleculeMaker
 
             if (selectedAtoms.Count < 2) throw new Exception("Need to select two atoms");
 
-            
-
-            Bond bond = new Bond(selectedAtoms[0], selectedAtoms[1], 1);
-            graphics.DrawLine(new Pen(Color.Black, 2), bond.point1, bond.point2);
-            //boardPB.BringToFront();
-            Board.Image = bitmap;
-
-            bonds.Add(bond);
-
-            switch(bondsForm.SelectedButtonText)
+            if (e.BondType == BondTypes.None)
             {
-                case "Single":
+                UnselectAtoms();
+                return;
+            }
+
+            Bond bond = null;
+
+            switch(e.BondType)
+            {
+                case BondTypes.Single:
+                    bond = new Bond(selectedAtoms[0], selectedAtoms[1], 1);
+                    graphics.DrawLine(new Pen(Color.Black, 2), bond.point1, bond.point2);
                     break;
-                case "Double":
+                case BondTypes.Double:
+                    bond = new Bond(selectedAtoms[0], selectedAtoms[1], 2);
+                    graphics.DrawLine(new Pen(Color.Black, 2), bond.point1, bond.point2);
                     break;
-                case "Triple":
-                    break;
-                case "Cancel":
+                case BondTypes.Triple:
+                    bond = new Bond(selectedAtoms[0], selectedAtoms[1], 3);
+                    graphics.DrawLine(new Pen(Color.Black, 2), bond.point1, bond.point2);
                     break;
             }
+
+            bonds.Add(bond);
+            Board.Image = bitmap;
+
             UnselectAtoms();
         }
         private void dragInterval_Tick(object sender, EventArgs e)
